@@ -1,0 +1,65 @@
+:root {
+    --dark-gray: #303030;
+    --purple: #6441A5;
+}
+
+* {
+    /*color: whitesmoke;*/
+    color: #FFFFFF;
+    font-family: Calibri, sans-serif;
+    user-select: none;
+}
+
+body {
+    /*background: var(--purple);*/
+    background: #424242;
+    text-align: center;
+	margin-bottom: 100px;  /* Ajouter un espace de 100px en bas de la page */
+}
+
+input {
+    background-color: var(--dark-gray);
+    font-size: 12pt;
+    border: 2px solid whitesmoke;
+    border-radius: 4px;
+}
+
+input[type="email"] {
+    padding: 4px;
+    width: 300px;
+}
+
+select {
+    background-color: var(--dark-gray);
+    font-size: 12pt;
+    border: 2px solid whitesmoke;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+button {
+    /*background-color: var(--primary-blue);*/
+	position: fixed;
+    font-size: 12pt;
+    border: 2px solid whitesmoke;
+    border-radius: 4px;
+}
+
+.form-section-header {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+#fixed-button {
+    position: fixed; /* Fixe le bouton par rapport à la fenêtre */
+    bottom: 24px; /* Distance par rapport au bas de la page */
+    left: 50%; /* Centre horizontalement */
+    transform: translateX(-50%); /* Ajuste pour centrer le bouton */
+    background-color: #ff6d00;
+    font-size: 12pt;
+    border: 2px solid #FFFFFF;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    z-index: 1000; /* Garantit que le bouton reste au-dessus */
+}

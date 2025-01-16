@@ -3,6 +3,24 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# ignore all .ini files
+*.ini
+
+# ignore all .json files
+*.json
+
+# ignore all .csv files
+*.csv
+
+# ignore all .exe files
+*.exe
+
+# ignore all .txt files
+*.txt
+
+# ignore all .bak files
+*.bak
+
 # C extensions
 *.so
 
