@@ -88,11 +88,11 @@ def main(o):
                 notifTextTelegram += "\n/help for more"
                  
                 # add unsubscribe link
-                unsubscribeLinkEmail=f'<HTML><a href="twitchdropnotif.pythonanywhere.com/unsubscribe?id={user}" target="_blank">Unsubscribe</a>  |  '
+                unsubscribeLinkEmail=f'<HTML><a href="https://twitchdropnotif.pythonanywhere.com/unsubscribe?id={user}" target="_blank">Unsubscribe</a>  |  '
                 notifTextEmail += unsubscribeLinkEmail
                 
                 # add edit preferences link
-                preferencesLinkEmail=f'<HTML><a href="twitchdropnotif.pythonanywhere.com/?id={user}" target="_blank">Edit preferences</a>'
+                preferencesLinkEmail=f'<HTML><a href="https://twitchdropnotif.pythonanywhere.com/?id={user}" target="_blank">Edit preferences</a>'
                 notifTextEmail += preferencesLinkEmail
                 
                 #print(f"Email text: {notifTextEmail}")

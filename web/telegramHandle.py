@@ -54,7 +54,7 @@ async def unsubscribe_command(update: Update, context: ContextTypes.DEFAULT_TYPE
         # check if the telegram user to unsubscribe is the same as the chat id
         if usersDbRefGet[user].get("telegram") == str(update.message.chat_id):
             userID=user
-            await update.message.reply_text(f"Click to <a href='twitchdropnotif.pythonanywhere.com/unsubscribe?id={userID}'>unsubscribe</a>", parse_mode=telegram.constants.ParseMode.HTML)
+            await update.message.reply_text(f"Click to <a href='https://twitchdropnotif.pythonanywhere.com/unsubscribe?id={userID}'>unsubscribe</a>", parse_mode=telegram.constants.ParseMode.HTML)
             break
 
     if userID=="":
@@ -72,7 +72,7 @@ async def edit_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
         # check if the telegram user to unsubscribe is the same as the chat id
         if usersDbRefGet[user].get("telegram") == str(update.message.chat_id):
             userID=user
-            await update.message.reply_text(f"Edit your games <a href='twitchdropnotif.pythonanywhere.com/?id={userID}'>HERE</a>", parse_mode=telegram.constants.ParseMode.HTML)
+            await update.message.reply_text(f"Edit your games <a href='https://twitchdropnotif.pythonanywhere.com/?id={userID}'>HERE</a>", parse_mode=telegram.constants.ParseMode.HTML)
             break
 
     if userID=="":

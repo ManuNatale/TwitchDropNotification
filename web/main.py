@@ -12,7 +12,6 @@ import firebase_admin
 from firebase_admin import db
 from flask import Flask, render_template, request
 
-#from google.cloud import firestore
 import pytz
 
 
