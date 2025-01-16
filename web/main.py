@@ -5,7 +5,6 @@ import subprocess
 import configparser
 import asyncio
 
-import newDropCheck
 import telegramSend
 
 import firebase_admin
@@ -86,8 +85,9 @@ def subscribe():
     
     # Make sure this user is not already subscribed
     for user, data in usersDbGet.items():
-        #print(data)
-        if request.form['email'] in data.values() or request.form['telegram'] in data.values():
+        print(data["telegram"])
+        print(data.values())
+        if (request.form['email'] in data["email"] and len(request.form['email']) > 1) or (request.form['telegram'] in data["telegram"] and len(request.form['telegram']) > 1):
             return render_template('error.html', message='This user is already subscribed!')
 
     games = {}
@@ -167,6 +167,9 @@ def update():
 
 @app.route('/unsubscribe', methods=['GET'])
 def unsubscribe():
+    
+    if "TelegramBot" in request.headers.get("User-Agent", ""):
+        return "Preloading not allowed", 403
     
     usersDbRefGet = db.reference("/users/").get()
     
