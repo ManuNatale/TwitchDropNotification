@@ -85,8 +85,8 @@ def subscribe():
     
     # Make sure this user is not already subscribed
     for user, data in usersDbGet.items():
-        print(data["telegram"])
-        print(data.values())
+        #print(data["telegram"])
+        #print(data.values())
         if (request.form['email'] in data["email"] and len(request.form['email']) > 1) or (request.form['telegram'] in data["telegram"] and len(request.form['telegram']) > 1):
             return render_template('error.html', message='This user is already subscribed!')
 
