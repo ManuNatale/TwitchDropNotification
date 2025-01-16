@@ -64,7 +64,7 @@ def CreateMessage(sender, to, subject, msgHtml, msgPlain):
     body = {'raw': raw}
     return body
 
-def Send(_to, _subject, _message):
+def send(_to, _subject, _message):
     to = _to
     sender = "twitchdropnotify@gmail.com "
     subject = _subject

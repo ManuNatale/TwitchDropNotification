@@ -98,17 +98,21 @@ def main(o):
                 #print(f"Email text: {notifTextEmail}")
                 #print(f"Telegram text: {notifTextTelegram}")
                 
-                if userData["email"] != "":
-                    #sendEmail.Send(userData["email"], "Active Twitch Drop campaigns", notifTextEmail)
-                    print(f"email sent {userData['email']}")
-                    
-                if userData["telegram"] != "":
-                    msgs = [notifTextTelegram[i:i + 4095] for i in range(0, len(notifTextTelegram), 4095)]
-                    for text in msgs:
-                        print(f"My text len {len(text)}")
-                        #telegramSend.send(userData["telegram"], text)
-                        threading.Thread(target=telegramSend.send, args=(userData["telegram"], text)).start()
-                        print(f"telegram sent {userData['telegram']}")
+                try:
+                    if userData["email"] != "":
+                        #sendEmail.Send(userData["email"], "Active Twitch Drop campaigns", notifTextEmail)
+                        threading.Thread(target=sendEmail.send, args=(userData["email"], "Active Twitch Drop campaigns", notifTextEmail)).start()
+                        print(f"email sent {userData['email']}")
+                        
+                    if userData["telegram"] != "":
+                        msgs = [notifTextTelegram[i:i + 4095] for i in range(0, len(notifTextTelegram), 4095)]
+                        for text in msgs:
+                            print(f"My text len {len(text)}")
+                            #telegramSend.send(userData["telegram"], text)
+                            threading.Thread(target=telegramSend.send, args=(userData["telegram"], text)).start()
+                            print(f"telegram sent {userData['telegram']}")
+                except Exception as e:
+                    print(e)
                 
             #sys.exit()
             print("Waiting before next newDropCheck")

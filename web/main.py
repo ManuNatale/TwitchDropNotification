@@ -115,8 +115,7 @@ def subscribe():
     usersDbRef.update(user)
     
     #print(user)
-    threading.Thread(target=telegramSend.send, args=(request.form['telegram'], "You have subscribed to notifications\n\n/help for more")).start()
-    #telegramSend.send(request.form['telegram'], 'You have subscribed to notifications\n\n/help for more')
+    telegramSend.send(request.form['telegram'], 'You have subscribed to notifications\n\n/help for more')
 
     return render_template('success.html', message='You have subscribed to notifications!')
 
@@ -155,7 +154,7 @@ def update():
             if _tempGame in usersDbGetGames:
                 _tempGameValue=usersDbGetGames[_tempGame]
             else:
-                _tempGameValue=0
+                _tempGameValue="Not Live"
             print(usersDbGetGames)
             games.update({_tempGame: _tempGameValue})
             print(f"Selected game: {_tempGame}")
@@ -182,9 +181,6 @@ def unsubscribe():
 
 if __name__ == '__main__':
     subprocess.Popen(["python", "telegramHandle.py"]) # non blocking
-    
-    #Thread start checking new drop for users
-    threading.Thread(target=newDropCheck.main, args=(1,)).start()
     
     app.run('localhost')
     

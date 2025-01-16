@@ -8,8 +8,12 @@ import csv
 import json
 import uuid
 import configparser
+import threading
 import firebase_admin
 from firebase_admin import db
+
+import newDropCheck
+import telegramSend
 
 # read config
 # Create a ConfigParser object
@@ -26,6 +30,9 @@ cred_obj = firebase_admin.credentials.Certificate(firebaseCredFile)
 default_app = firebase_admin.initialize_app(cred_obj, {
     'databaseURL':databaseURL
     })
+    
+#Thread start checking new drop for users
+threading.Thread(target=newDropCheck.main, args=(1,)).start()
 
 while(True):
     #break
