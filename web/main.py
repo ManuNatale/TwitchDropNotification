@@ -44,6 +44,8 @@ usersDbRef = db.reference("/users/")
 def index():
     gamesDbGet = db.reference("/games/").get()
     
+    #print(request.environ.get('HTTP_X_REAL_IP', request.remote_addr))
+    
     # Find user
     user = None
     user_id = request.args.get('id', None)

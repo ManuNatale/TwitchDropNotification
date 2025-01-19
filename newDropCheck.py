@@ -5,6 +5,7 @@ import threading
 import time
 import sys
 import configparser
+from datetime import datetime
 
 import firebase_admin
 from firebase_admin import db
@@ -29,11 +30,11 @@ personnalEmail = config.get('Email', 'personnalEmail')
 #    })
 
 def main(o):
-    print("Starting users drop checking")
+    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Starting users drop checking")
     time.sleep(3)
     
     while(True):
-        print("New iteration of newDropCheck")
+        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} New iteration of newDropCheck")
         try:
             usersDbGet = db.reference("/users/").get()
             usersDbRef = db.reference("/users/")
@@ -115,7 +116,7 @@ def main(o):
                     print(e)
                 
             #sys.exit()
-            print("Waiting before next newDropCheck")
+            print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Waiting before next newDropCheck")
             time.sleep(900)
             
         except Exception as e:

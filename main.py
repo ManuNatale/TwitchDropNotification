@@ -1,5 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
@@ -11,6 +13,7 @@ import configparser
 import threading
 import firebase_admin
 from firebase_admin import db
+from datetime import datetime
 
 import newDropCheck
 import telegramSend
@@ -25,6 +28,7 @@ config.read('./config.ini')
 # Access values from the configuration file
 databaseURL = config.get('General', 'databaseURL')
 firebaseCredFile = config.get('General', 'firebaseCredFile')
+personnalTelegramID = config.get('General', 'personnalTelegramID')
 
 cred_obj = firebase_admin.credentials.Certificate(firebaseCredFile)
 default_app = firebase_admin.initialize_app(cred_obj, {
@@ -37,23 +41,42 @@ threading.Thread(target=newDropCheck.main, args=(1,)).start()
 while(True):
     #break
     
-    print("Starting to check live games")
+    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Starting to check live games")
     
     gamesDbRef = db.reference("/games/")
     usersDbRef = db.reference("/users/")
     usersDbGet = db.reference("/users/").get()
 
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless=new')
-    options.add_argument("user-data-dir=C:\\Users\\manue\\AppData\\Local\\Google\\Chrome\\User Data")
-    options.add_argument("profile-directory=Profile 1") # <-- substitute Profile 3 with your profile name
-    chromedriver_path = '.\\chromedriver.exe'
-    driver = webdriver.Chrome(options=options, service=Service(chromedriver_path))
+    #options = webdriver.ChromeOptions()
+    #options.add_argument('--headless=new')
+    #options.add_argument("user-data-dir=/home/manu/snap/firefox/common/.mozilla/firefox/")
+    #options.add_argument("profile-directory=q2cwcxkf.default") # <-- substitute Profile 3 with your profile name
+    #chromedriver_path = './geckodriver'
+    #driver = webdriver.Chrome(options=options, service=Service(chromedriver_path))
+    
+    # Options pour Firefox
+    options = Options()
+    #options.add_argument("--headless")  # Activer le mode headless
+    options.add_argument('-profile')
+    options.add_argument('/home/manu/.mozilla/firefox/m0kxyq12.pythonselenium')
+    options.set_preference('useAutomationExtension', False)
+    profile_path = "/home/manu/.mozilla/firefox/m0kxyq12.pythonselenium"
+    #options.set_preference("profile", profile_path)
+
+    # Chemin vers geckodriver
+    geckodriver_path = './geckodriver'  # Assurez-vous que geckodriver est dans ce chemin
+
+    # Initialisation du driver
+    driver = webdriver.Firefox(service=Service(geckodriver_path), options=options)
+    
     driver.get('https://www.twitch.tv/drops/campaigns')
     time.sleep(5)
 
     # Need to scroll
-    driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]").location_once_scrolled_into_view
+    try:
+        driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]").location_once_scrolled_into_view
+    except:
+        pass
     time.sleep(1)
 
     gamesArray = {}
@@ -73,7 +96,12 @@ while(True):
         
     except Exception as e:
         #print(e)
-        pass
+        if "Log in to Twitch" in driver.page_source:
+            telegramSend.send(personnalTelegramID, 'Error trying to access drops campaigns\. Login required')
+            time.sleep(3600)
+            continue
+        else:
+            pass
 
     #print(gamesArray)
     gamesDbRef.update(gamesArray)
@@ -92,7 +120,7 @@ while(True):
             gamesDbRef.update({key: {"isLive": 0, "gameLiveTime": "Not Live"}})
             
     ###### update users games data-dir
-    print("\nUpdating user games data...")
+    print(f"\n{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Updating user games data...")
     usersDbGet = db.reference("/users/").get()
 
     gamesDbGet = db.reference("/games/").get()
@@ -114,12 +142,11 @@ while(True):
                 #if game doesn't exist
                 gameToDelete=db.reference(f"/users/{user}/games/{game}")
                 gameToDelete.delete()
-    print("User data updated")
+    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} User data updated")
 
 
-    print(f"\nTotal games {totalGames}")
+    print(f"\n{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Total games {totalGames}")
     driver.quit()
     time.sleep(900)
-
 
 
