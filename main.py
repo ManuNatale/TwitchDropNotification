@@ -15,7 +15,7 @@ import firebase_admin
 from firebase_admin import db
 from datetime import datetime
 
-import newDropCheck
+import notifyUsers
 import telegramSend
 
 # read config
@@ -36,7 +36,7 @@ default_app = firebase_admin.initialize_app(cred_obj, {
     })
     
 #Thread start checking new drop for users
-threading.Thread(target=newDropCheck.main, args=(1,)).start()
+threading.Thread(target=notifyUsers.main, args=(1,)).start()
 
 while(True):
     #break
