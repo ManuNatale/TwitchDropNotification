@@ -185,7 +185,6 @@ def unsubscribe():
         return render_template('error.html', message='This user is not subscribed.')
 
 if __name__ == '__main__':
-    subprocess.Popen(["python", "telegramHandle.py"]) # non blocking
     
     app.run('localhost')
     
