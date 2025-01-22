@@ -9,6 +9,7 @@ import sys
 import csv
 import json
 import uuid
+import subprocess
 import configparser
 import threading
 import firebase_admin
@@ -35,6 +36,9 @@ default_app = firebase_admin.initialize_app(cred_obj, {
     'databaseURL':databaseURL
     })
     
+#run telegram handle
+subprocess.Popen(["python", "telegramHandle.py"])    
+
 #Thread start checking new drop for users
 threading.Thread(target=notifyUsers.main, args=(1,)).start()
 
