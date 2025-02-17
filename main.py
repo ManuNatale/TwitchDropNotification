@@ -60,7 +60,7 @@ while(True):
     
     # Options pour Firefox
     options = Options()
-    #options.add_argument("--headless")  # Activer le mode headless
+    options.add_argument("--headless")  # Activer le mode headless
     options.add_argument('-profile')
     options.add_argument('/home/manu/.mozilla/firefox/m0kxyq12.pythonselenium')
     options.set_preference('useAutomationExtension', False)
@@ -78,8 +78,9 @@ while(True):
 
     # Need to scroll
     try:
-        driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]").location_once_scrolled_into_view
+        driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[6]").location_once_scrolled_into_view
     except:
+        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Can not scroll")
         pass
     time.sleep(1)
 
@@ -88,8 +89,8 @@ while(True):
     try:
         index=1
         while(True):
-            gameName = driver.find_element(By.XPATH, f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[2]/div/h3").text.replace(".", "_%2E_")
-            gameLiveTime = driver.find_element(By.XPATH, f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[3]").text
+            gameName = driver.find_element(By.XPATH, f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]/div[{index}]/div[1]/button/div/div[2]/div/h3").text.replace(".", "_%2E_")
+            gameLiveTime = driver.find_element(By.XPATH, f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]/div[{index}]/div[1]/button/div/div[3]").text
             if gameName=="":
                 continue
             print(gameName)
@@ -108,7 +109,11 @@ while(True):
             pass
 
     #print(gamesArray)
-    gamesDbRef.update(gamesArray)
+    try:
+        gamesDbRef.update(gamesArray)
+    except ValueError as ve:
+        telegramSend.send(personnalTelegramID, f'Error at gamesDbRef update Array is empty')
+        
 
     print(f"{index} games drops found")
 
@@ -152,5 +157,4 @@ while(True):
     print(f"\n{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Total games {totalGames}")
     driver.quit()
     time.sleep(900)
-
 
