@@ -58,7 +58,7 @@ while(True):
     #chromedriver_path = './geckodriver'
     #driver = webdriver.Chrome(options=options, service=Service(chromedriver_path))
     
-    # Options pour Firefox
+    # Options Firefox
     options = Options()
     options.add_argument("--headless")  # Activer le mode headless
     options.add_argument('-profile')
@@ -74,25 +74,34 @@ while(True):
     driver = webdriver.Firefox(service=Service(geckodriver_path), options=options)
     
     driver.get('https://www.twitch.tv/drops/campaigns')
-    time.sleep(5)
+    time.sleep(10)
 
     # Need to scroll
     try:
-        driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[6]").location_once_scrolled_into_view
+        driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]").location_once_scrolled_into_view
     except:
         print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Can not scroll")
         pass
-    time.sleep(1)
+    time.sleep(2)
 
     gamesArray = {}
 
     try:
         index=1
         while(True):
-            gameName = driver.find_element(By.XPATH, f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]/div[{index}]/div[1]/button/div/div[2]/div/h3").text.replace(".", "_%2E_")
-            gameLiveTime = driver.find_element(By.XPATH, f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]/div[{index}]/div[1]/button/div/div[3]").text
+            gameNameXpath1 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[2]/div/h3"
+            gameLiveTimeXpath1 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[3]"
+            # alterniative xpath :
+            gameNameXpath2 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[2]/div/h3"
+            gameLiveTimeXpath2 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[3]"
+            gameName = driver.find_element(By.XPATH, gameNameXpath1).text.replace(".", "_%2E_")
+            gameLiveTime = driver.find_element(By.XPATH, gameLiveTimeXpath1).text
             if gameName=="":
-                continue
+                print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Trying alternative XPATH")
+                gameName = driver.find_element(By.XPATH, gameNameXpath2).text.replace(".", "_%2E_")
+                gameLiveTime = driver.find_element(By.XPATH, gameLiveTimeXpath2).text
+                if gameName=="":
+                    continue
             print(gameName)
             print(gameLiveTime)
             gamesArray.update({gameName: {"isLive": 1, "gameLiveTime": gameLiveTime}})
