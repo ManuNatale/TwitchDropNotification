@@ -132,7 +132,7 @@ while(True):
         else:
             pass
 
-    print(gamesArray)
+    #print(gamesArray)
     try:
         gamesDbRef.update(gamesArray)
     except ValueError as ve:
