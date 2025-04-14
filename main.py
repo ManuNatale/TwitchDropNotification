@@ -80,8 +80,13 @@ while(True):
     try:
         driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]").location_once_scrolled_into_view
     except:
-        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Can not scroll")
-        pass
+        print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Can not scroll first")
+        try:
+            driver.find_element(By.XPATH, "/html/body/div[1]/div/div[1]/div/main/div[1]/div[2]/div/div/div/div/div[5]").location_once_scrolled_into_view
+            print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Scrolled Second")
+        except:
+            print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Can not scroll second")
+            pass
     time.sleep(2)
 
     gamesArray = {}
@@ -92,16 +97,26 @@ while(True):
             gameNameXpath1 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[2]/div/h3"
             gameLiveTimeXpath1 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[3]"
             # alterniative xpath :
-            gameNameXpath2 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[2]/div/h3"
-            gameLiveTimeXpath2 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[3]"
-            gameName = driver.find_element(By.XPATH, gameNameXpath1).text.replace(".", "_%2E_")
-            gameLiveTime = driver.find_element(By.XPATH, gameLiveTimeXpath1).text
-            if gameName=="":
-                print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Trying alternative XPATH")
-                gameName = driver.find_element(By.XPATH, gameNameXpath2).text.replace(".", "_%2E_")
-                gameLiveTime = driver.find_element(By.XPATH, gameLiveTimeXpath2).text
-                if gameName=="":
-                    continue
+            gameNameXpath2 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[2]/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[2]/div/h3"
+            gameLiveTimeXpath2 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[2]/div/div/div/div[4]/div[{index}]/div[1]/button/div/div[3]"
+            # alterniative xpath :
+            gameNameXpath3 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]/div[{index}]/div[1]/button/div/div[2]/div/h3"
+            gameLiveTimeXpath3 = f"/html/body/div[1]/div/div[1]/div/main/div[1]/div[3]/div/div/div/div/div[5]/div[{index}]/div[1]/button/div/div[3]"
+            try:
+                gameName = driver.find_element(By.XPATH, gameNameXpath1).text.replace(".", "_%2E_")
+                gameLiveTime = driver.find_element(By.XPATH, gameLiveTimeXpath1).text
+            except:
+                try:
+                    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Trying alternative XPATH 2")
+                    gameName = driver.find_element(By.XPATH, gameNameXpath2).text.replace(".", "_%2E_")
+                    gameLiveTime = driver.find_element(By.XPATH, gameLiveTimeXpath2).text
+                except:
+                    print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Trying alternative XPATH 3")
+                    gameName = driver.find_element(By.XPATH, gameNameXpath3).text.replace(".", "_%2E_")
+                    gameLiveTime = driver.find_element(By.XPATH, gameLiveTimeXpath3).text
+                    if gameName=="":
+                        index += 1
+                        continue
             print(gameName)
             print(gameLiveTime)
             gamesArray.update({gameName: {"isLive": 1, "gameLiveTime": gameLiveTime}})
@@ -117,7 +132,7 @@ while(True):
         else:
             pass
 
-    #print(gamesArray)
+    print(gamesArray)
     try:
         gamesDbRef.update(gamesArray)
     except ValueError as ve:
