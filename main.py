@@ -114,9 +114,9 @@ while(True):
                     print(f"{datetime.now().strftime('%Y-%m-%d %H:%M:%S')} Trying alternative XPATH 3")
                     gameName = driver.find_element(By.XPATH, gameNameXpath3).text.replace(".", "_%2E_")
                     gameLiveTime = driver.find_element(By.XPATH, gameLiveTimeXpath3).text
-                    if gameName=="":
-                        index += 1
-                        continue
+            if gameName=="":
+                index += 1
+                continue
             print(gameName)
             print(gameLiveTime)
             gamesArray.update({gameName: {"isLive": 1, "gameLiveTime": gameLiveTime}})
